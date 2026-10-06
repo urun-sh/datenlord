@@ -1,6 +1,6 @@
 //! Internal unsafe marker for FUSE ABI types
 
-use std::{mem, slice};
+use std::slice;
 
 /// FUSE ABI types.
 ///
@@ -17,7 +17,7 @@ pub unsafe trait FuseAbiData {}
 #[allow(dead_code)] // TODO
 #[inline]
 pub unsafe fn as_bytes_unchecked<T: Sized>(raw: &T) -> &[u8] {
-    let ty_size = mem::size_of::<T>();
+    let ty_size = size_of::<T>();
     let base: *const u8 = <*const T>::cast(raw);
     slice::from_raw_parts(base, ty_size)
 }
@@ -46,10 +46,10 @@ macro_rules! mark_sized_types {
         #[test]
         fn $name() {
             $(
-                assert!(mem::size_of::<super::protocol::$ty>() > 0); // ZST makes no sense
+                assert!(std::mem::size_of::<super::protocol::$ty>() > 0); // ZST makes no sense
             )+
             $(
-                assert!(mem::size_of::<super::protocol::$ty>() <= 256); // detect large types
+                assert!(std::mem::size_of::<super::protocol::$ty>() <= 256); // detect large types
             )+
         }
     };

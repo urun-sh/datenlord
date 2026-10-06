@@ -1,4 +1,4 @@
-use std::{fmt, mem};
+use std::fmt;
 
 use async_trait::async_trait;
 use bytes::{Buf, BufMut, BytesMut};
@@ -310,7 +310,7 @@ impl RequestTask for FileBlockRequestTask {
 
     /// Get request size to construct request header
     fn get_req_len(&self) -> u64 {
-        usize_to_u64(mem::size_of_val(&self.request))
+        usize_to_u64(size_of_val(&self.request))
     }
 }
 
@@ -560,8 +560,8 @@ impl ActualSize for KVBlockPutRequest {
     /// Get the actual size of the request.
     fn actual_size(&self) -> u64 {
         let data_len = usize_to_u64(self.data.len());
-        let block_size_len = usize_to_u64(mem::size_of_val(&self.block_size));
-        let kv_cache_id_len = usize_to_u64(mem::size_of_val(&self.kv_cache_id));
+        let block_size_len = usize_to_u64(size_of_val(&self.block_size));
+        let kv_cache_id_len = usize_to_u64(size_of_val(&self.kv_cache_id));
         data_len
             .overflow_add(block_size_len)
             .overflow_add(kv_cache_id_len)
@@ -623,7 +623,7 @@ impl DecodeLarge for KVBlockBatchPutRequest {
 impl ActualSize for KVBlockBatchPutRequest {
     /// Get the actual size of the request.
     fn actual_size(&self) -> u64 {
-        let mut size = usize_to_u64(mem::size_of_val(&self.batch_size));
+        let mut size = usize_to_u64(size_of_val(&self.batch_size));
         for block in &self.blocks {
             size = size.overflow_add(block.actual_size());
         }
@@ -781,7 +781,7 @@ where
     #[allow(clippy::pattern_type_mismatch)]
     fn actual_size(&self) -> u64 {
         match self {
-            Self::KVCacheSmallRequest(request) => usize_to_u64(mem::size_of_val(request)),
+            Self::KVCacheSmallRequest(request) => usize_to_u64(size_of_val(request)),
             Self::KVCacheLargeRequest(request) => request.actual_size(),
         }
     }

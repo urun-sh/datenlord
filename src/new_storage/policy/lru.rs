@@ -20,7 +20,6 @@ where
 }
 
 impl<K: Clone + Hash + Eq> EvictPolicy<K> for LruPolicy<K> {
-    #[must_use]
     #[inline]
     fn new(capacity: usize) -> Self {
         LruPolicy {

@@ -213,8 +213,6 @@ pub mod setattr_flags {
     pub const FATTR_CTIME: u32 = 1 << 10_i32;
 }
 
-use std::mem;
-
 use clippy_utilities::{Cast, OverflowArithmetic};
 pub use setattr_flags::*;
 
@@ -378,8 +376,6 @@ pub mod write_flags {
     #[cfg(feature = "abi-7-31")]
     pub const FUSE_WRITE_KILL_PRIV: u32 = 1 << 2_i32;
 }
-
-pub use write_flags::*;
 
 /// Read flags
 #[allow(dead_code)]
@@ -1305,7 +1301,7 @@ impl FuseDirEnt {
     /// <https://github.com/torvalds/linux/blob/00c570f4ba43ae73b41fa0a2269c3b0ac20386ef/include/uapi/linux/fuse.h#L701-L702>
     #[must_use]
     pub fn size_with_name(&self) -> usize {
-        mem::size_of::<Self>().overflow_add(self.namelen.cast())
+        size_of::<Self>().overflow_add(self.namelen.cast())
     }
 }
 

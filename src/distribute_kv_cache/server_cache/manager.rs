@@ -107,7 +107,6 @@ pub struct BlockManager {
 
 impl Default for BlockManager {
     /// Create a new `KVBlockManager` with default `FSBackend`
-    #[must_use]
     fn default() -> Self {
         let backend = Arc::new(FSBackend::default());
         Self::new(2000, backend)
@@ -253,7 +252,6 @@ pub struct KVBlockManager {
 
 impl Default for KVBlockManager {
     /// Create a new `KVBlockManager` with default `FSBackend`
-    #[must_use]
     fn default() -> Self {
         let backend = Arc::new(FSBackend::default());
         Self::new(2000, backend)

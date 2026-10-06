@@ -179,7 +179,7 @@ where
 
     /// Get the next sequence number.
     pub fn next_seq(&self) -> u64 {
-        self.seq.fetch_add(1, std::sync::atomic::Ordering::AcqRel)
+        self.seq.fetch_add(1, Ordering::AcqRel)
     }
 
     /// Send keep alive message to the server
@@ -188,9 +188,8 @@ where
         let current_seq = self.next_seq();
         let current_timestamp = self.clock_instant.elapsed().as_secs();
         // Check keepalive is valid
-        let received_keepalive_timestamp = self
-            .received_keepalive_timestamp
-            .load(std::sync::atomic::Ordering::Acquire);
+        let received_keepalive_timestamp =
+            self.received_keepalive_timestamp.load(Ordering::Acquire);
         if current_timestamp - received_keepalive_timestamp
             > self.timeout_options.keep_alive_timeout.as_secs()
         {
@@ -208,7 +207,7 @@ where
         if let Ok(()) = self.send_data(&keep_alive_msg, None).await {
             debug!("{:?} Success to sent keep alive message", self);
             self.received_keepalive_timestamp
-                .store(current_timestamp, std::sync::atomic::Ordering::Release);
+                .store(current_timestamp, Ordering::Release);
             Ok(())
         } else {
             debug!("{:?} Failed to send keep alive message", self);
@@ -280,7 +279,7 @@ where
                     debug!("{:?} Received keep alive response or other response.", self);
                     let current_timestamp = self.clock_instant.elapsed().as_secs();
                     self.received_keepalive_timestamp
-                        .store(current_timestamp, std::sync::atomic::Ordering::Release);
+                        .store(current_timestamp, Ordering::Release);
                     // Update the received keep alive seq
                     if let Ok(resp_type) = RespType::try_from(header.op) {
                         if let RespType::KeepAliveResponse = resp_type {
@@ -409,7 +408,7 @@ where
         let inner_connection = RpcClientConnectionInner::new(
             stream,
             timeout_options,
-            client_id.load(std::sync::atomic::Ordering::Acquire),
+            client_id.load(Ordering::Acquire),
         );
 
         Self {
@@ -464,7 +463,7 @@ mod tests {
     };
 
     use super::*;
-    use std::{mem, time::Duration};
+    use std::time::Duration;
 
     /// Request struct for test
     #[derive(Debug, Default, Clone)]
@@ -535,7 +534,7 @@ mod tests {
         async fn set_result(self, _status: Result<(), RpcError>) {}
 
         fn get_req_len(&self) -> u64 {
-            usize_to_u64(mem::size_of_val(&self.request))
+            usize_to_u64(size_of_val(&self.request))
         }
     }
 

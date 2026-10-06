@@ -273,7 +273,7 @@ async fn scan_worker(storage: Arc<StorageManager<S3MetaData>>, ino: u64, time: u
     let mut i = 0;
     let mut scan_cnt = 0;
     let version = 0;
-    while tokio::time::Instant::now() - start < tokio::time::Duration::from_secs(time) {
+    while tokio::time::Instant::now() - start < Duration::from_secs(time) {
         // let mut buf = vec![0_u8; IO_SIZE];
         let mut buf = Vec::new();
         storage
@@ -298,7 +298,7 @@ async fn get_worker(storage: Arc<StorageManager<S3MetaData>>, ino: u64, time: u6
 
     let mut get_cnt = 0;
     let version = 0;
-    while tokio::time::Instant::now() - start < tokio::time::Duration::from_secs(time) {
+    while tokio::time::Instant::now() - start < Duration::from_secs(time) {
         // Use the Zipfian distribution to select the block ID
         let i = zipf.sample(&mut thread_rng()) as usize % TOTAL_TEST_BLOCKS;
 

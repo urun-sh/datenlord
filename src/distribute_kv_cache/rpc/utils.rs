@@ -141,11 +141,11 @@ fn num_to_u8_buffer<K>(input: Vec<K>) -> Vec<u8>
 where
     K: num::Num,
 {
-    let len = input.len() * mem::size_of::<K>();
+    let len = input.len() * size_of::<K>();
     let ptr = input.as_ptr();
     let capacity = input.capacity();
 
-    std::mem::forget(input);
+    mem::forget(input);
 
     unsafe { Vec::from_raw_parts(ptr as *mut u8, len, capacity) }
 }
@@ -160,15 +160,15 @@ where
     K: num::Num,
 {
     assert_eq!(
-        input.len() % mem::size_of::<K>(),
+        input.len() % size_of::<K>(),
         0,
         "Buffer length must be a multiple of key size"
     );
-    let len = input.len() / mem::size_of::<K>();
+    let len = input.len() / size_of::<K>();
     let ptr = input.as_ptr();
-    let capacity = input.capacity() / mem::size_of::<K>();
+    let capacity = input.capacity() / size_of::<K>();
 
-    std::mem::forget(input);
+    mem::forget(input);
 
     unsafe { Vec::from_raw_parts(ptr as *mut K, len, capacity) }
 }
@@ -183,7 +183,7 @@ fn u32_to_u8_buffer(input: Vec<u32>) -> Vec<u8> {
     let ptr = input.as_ptr();
     let capacity = input.capacity() * 4;
 
-    std::mem::forget(input);
+    mem::forget(input);
 
     unsafe { Vec::from_raw_parts(ptr as *mut u8, len, capacity) }
 }
@@ -200,7 +200,7 @@ fn u8_to_u32_buffer(input: Vec<u8>) -> Vec<u32> {
     let ptr = input.as_ptr();
     let capacity = input.capacity() / 4;
 
-    std::mem::forget(input);
+    mem::forget(input);
 
     unsafe { Vec::from_raw_parts(ptr as *mut u32, len, capacity) }
 }

@@ -1091,7 +1091,7 @@ impl MetaData {
                     })?;
                 Ok(volume_mount_paths
                     .split(VOLUME_BIND_MOUNT_PATH_SEPARATOR)
-                    .map(std::borrow::ToOwned::to_owned)
+                    .map(ToOwned::to_owned)
                     .collect())
             };
             self.etcd_delegate
@@ -1122,7 +1122,7 @@ impl MetaData {
 
         Ok(mount_paths
             .split(VOLUME_BIND_MOUNT_PATH_SEPARATOR)
-            .map(std::borrow::ToOwned::to_owned)
+            .map(ToOwned::to_owned)
             .collect())
     }
 
@@ -1144,7 +1144,7 @@ impl MetaData {
         match get_opt {
             Some(pre_mount_paths) => Ok(pre_mount_paths
                 .split(VOLUME_BIND_MOUNT_PATH_SEPARATOR)
-                .map(std::borrow::ToOwned::to_owned)
+                .map(ToOwned::to_owned)
                 .collect()),
             None => Ok(HashSet::new()),
         }
@@ -1669,7 +1669,7 @@ impl DatenLordVolume {
 
     /// Delete volume directory
     pub fn delete_directory(&self) -> DatenLordResult<()> {
-        std::fs::remove_dir_all(&self.vol_path).with_context(|| {
+        fs::remove_dir_all(&self.vol_path).with_context(|| {
             format!("failed to remove the volume directory: {:?}", self.vol_path)
         })?;
         Ok(())

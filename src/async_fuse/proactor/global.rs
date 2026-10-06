@@ -284,7 +284,6 @@ impl Proactor {
 
         let ring = RingBuilder::new(ring_entries).build()?;
 
-        #[allow(box_pointers)]
         let ring = Box::leak(Box::new(ring));
 
         let (mut sq, mut cq, _) = ring.split();

@@ -732,7 +732,7 @@ mod test {
         let end_pos = starting_pos.overflow_add(max_entries.cast::<usize>());
         let mut expect_vol_vec2 = all_vol_vec
             .get(starting_pos..end_pos)
-            .map_or(Vec::new(), std::borrow::ToOwned::to_owned);
+            .map_or(Vec::new(), ToOwned::to_owned);
         expect_vol_vec2.sort_unstable();
         assert_eq!(vol_vec2, expect_vol_vec2, "list volume result not match");
         let next_starting_pos = starting_pos.overflow_add(max_entries.cast::<usize>());
@@ -1272,7 +1272,7 @@ mod test {
         let vol_id = NODE_PUBLISH_VOLUME_ID;
         let mut mount_option = VolumeCapability_MountVolume::new();
         mount_option.set_fs_type("fuse".to_owned());
-        mount_option.set_mount_flags(protobuf::RepeatedField::from_vec(vec![
+        mount_option.set_mount_flags(RepeatedField::from_vec(vec![
             "nosuid".to_owned(),
             "nodev".to_owned(),
         ]));
@@ -1332,7 +1332,7 @@ mod test {
         let vol_id = NODE_PUBLISH_VOLUME_ID;
         let mut mount_option = VolumeCapability_MountVolume::new();
         mount_option.set_fs_type("fuse".to_owned());
-        mount_option.set_mount_flags(protobuf::RepeatedField::from_vec(vec![
+        mount_option.set_mount_flags(RepeatedField::from_vec(vec![
             "nosuid".to_owned(),
             "nodev".to_owned(),
         ]));
@@ -1382,7 +1382,7 @@ mod test {
         let vol_id = NODE_PUBLISH_VOLUME_ID;
         let mut mount_option = VolumeCapability_MountVolume::new();
         mount_option.set_fs_type("fuse".to_owned());
-        mount_option.set_mount_flags(protobuf::RepeatedField::from_vec(vec![
+        mount_option.set_mount_flags(RepeatedField::from_vec(vec![
             "nosuid".to_owned(),
             "nodev".to_owned(),
         ]));

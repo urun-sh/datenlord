@@ -272,7 +272,7 @@ fn test_rename_non_existent_source(mount_dir: &Path) -> anyhow::Result<()> {
         )),
         Err(e) => {
             // Check if the error kind is NotFound, which is expected in this case
-            if e.kind() == std::io::ErrorKind::NotFound {
+            if e.kind() == io::ErrorKind::NotFound {
                 Ok(()) // Test passes
             } else {
                 Err(anyhow::anyhow!(
@@ -338,7 +338,7 @@ fn test_rename_to_non_existent_destination_directory(mount_dir: &Path) -> anyhow
     let destination_file = non_existent_dir.join("destination_file.txt");
 
     // Create a source file for testing.
-    std::fs::write(&source_file, "Some content")?;
+    fs::write(&source_file, "Some content")?;
 
     // Attempt to rename the file to a non-existent directory
     match fs::rename(&source_file, destination_file) {
@@ -347,7 +347,7 @@ fn test_rename_to_non_existent_destination_directory(mount_dir: &Path) -> anyhow
         )),
         Err(e) => {
             // Check if the error kind is NotFound, which is expected in this case
-            if e.kind() == std::io::ErrorKind::NotFound {
+            if e.kind() == io::ErrorKind::NotFound {
                 Ok(()) // Test passes
             } else {
                 Err(anyhow::anyhow!(
@@ -751,7 +751,11 @@ fn test_libc_truncate(mount_dir: &Path) -> anyhow::Result<()> {
     let truncate_size = 16;
     let truncate_res = unsafe {
         libc::truncate(
-            file_path.as_os_str().as_bytes().as_ptr().cast::<i8>(),
+            file_path
+                .as_os_str()
+                .as_bytes()
+                .as_ptr()
+                .cast::<libc::c_char>(),
             truncate_size,
         )
     };
