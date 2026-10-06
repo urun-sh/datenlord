@@ -4,7 +4,7 @@ on:
         branches: [master]
 
 env:
-    CI_RUST_TOOLCHAIN: 1.74.0
+    CI_RUST_TOOLCHAIN: 1.88.0
     CONTROLLER_SOCKET_FILE: /tmp/controller.sock
     BIND_MOUNTER: target/debug/bind_mounter
     ETCD_CONTAINER_NAME: etcd
@@ -81,5 +81,19 @@ jobs:
             make
         - name: Run fstest
           run: |
+            # wait $DATENLORD_LOCAL_BIND_DIR to be mounted by the local
+            # datenlord node (mere directory existence is not enough: the
+            # tests must run inside the FUSE mount)
+            for i in {1..100}; do
+              if mountpoint -q $DATENLORD_LOCAL_BIND_DIR; then
+                echo "Try $i times, $DATENLORD_LOCAL_BIND_DIR is mounted"
+                break
+              fi
+              sleep 5
+            done
+            if ! mountpoint -q $DATENLORD_LOCAL_BIND_DIR; then
+              echo "$DATENLORD_LOCAL_BIND_DIR is not mounted after 100 tries"
+              exit 1
+            fi
             cd $DATENLORD_LOCAL_BIND_DIR
             sudo prove -rv /home/runner/work/datenlord/datenlord/tests/fstest_dir/tests/

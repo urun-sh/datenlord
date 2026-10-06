@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use crate::common::error::{Context, DatenLordResult};
 use crate::fs::fs_util::INum;
-use crate::fs::kv_engine::{self, KVEngine, KVEngineType, KeyType, LockKeyType, ValueType};
+use crate::fs::kv_engine::{KVEngine, KVEngineType, KeyType, LockKeyType, ValueType};
 
 /// The kv lock 's timeout
 const LOCK_TIME_OUT_SECS: u64 = 10;
@@ -30,7 +30,7 @@ where
         .get(&KeyType::FileNodeList(file_ino))
         .await
         .with_context(|| format!("fail to get node list for file {file_ino:?}",))?
-        .map(kv_engine::ValueType::into_raw);
+        .map(ValueType::into_raw);
 
     let new_node_list = fun(node_list);
 

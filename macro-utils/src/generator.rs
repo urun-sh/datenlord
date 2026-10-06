@@ -1,6 +1,6 @@
 //! Some types and the underlying implementations for the crate.
 
-use core::mem;
+use core::mem::size_of;
 
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
@@ -100,10 +100,10 @@ impl Item {
     /// Get the size of this item (in bytes).
     fn size(&self) -> usize {
         match *self {
-            Item::U8(_) | Item::I8(_) => mem::size_of::<u8>(),
-            Item::U16(_) | Item::I16(_) => mem::size_of::<u16>(),
-            Item::U32(_) | Item::I32(_) => mem::size_of::<u32>(),
-            Item::U64(_) | Item::I64(_) => mem::size_of::<u64>(),
+            Item::U8(_) | Item::I8(_) => size_of::<u8>(),
+            Item::U16(_) | Item::I16(_) => size_of::<u16>(),
+            Item::U32(_) | Item::I32(_) => size_of::<u32>(),
+            Item::U64(_) | Item::I64(_) => size_of::<u64>(),
             Item::Bytes(ref bytes) => bytes.len(),
         }
     }

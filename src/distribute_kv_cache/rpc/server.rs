@@ -433,7 +433,7 @@ where
     /// Start the RPC server.
     pub async fn listen(&mut self, addr: &str) -> Result<(), RpcError> {
         // Start the server
-        let listener = tokio::net::TcpListener::bind(addr)
+        let listener = net::TcpListener::bind(addr)
             .await
             .map_err(|err| RpcError::InternalError(err.to_string()))?;
         debug!("listening on {:?}", addr.to_owned());
@@ -441,7 +441,7 @@ where
         // Accept incoming connections
         let timeout_options = self.timeout_options.clone();
         let factory = self.rpc_conn_worker_factory.clone();
-        let handle = tokio::task::spawn(async move {
+        let handle = task::spawn(async move {
             loop {
                 let conn_timeout_options = timeout_options.clone();
                 match listener.accept().await {
@@ -493,7 +493,7 @@ mod tests {
 
     /// Check if the port is in use
     async fn is_port_in_use(addr: &str) -> bool {
-        if let Ok(stream) = tokio::net::TcpStream::connect(addr).await {
+        if let Ok(stream) = net::TcpStream::connect(addr).await {
             // Port is in use
             drop(stream);
             true

@@ -11,5 +11,6 @@ mod task;
 mod tests;
 
 pub use gc::GcHandle;
+#[allow(unused_imports)] // re-exported for library users and used by `tests`
 pub use manager::{wait_for_shutdown, SpawnError, TaskManager, TASK_MANAGER};
 pub use task::TaskName;

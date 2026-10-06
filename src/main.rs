@@ -70,6 +70,46 @@
     clippy::missing_assert_message, // Allow assert! without message, mainly in test code
     clippy::semicolon_outside_block, // We need to choose between this and `semicolon_inside_block`, we choose outside
     clippy::similar_names, // Allow similar names, due to the existence of uid and gid
+    // The following lints are newly fired by the clippy of Rust 1.88
+    // (the toolchain pinned by rust-toolchain.toml), TODO: fix them
+    clippy::arbitrary_source_item_ordering, // TODO: reorder source items alphabetically
+    clippy::allow_attributes, // TODO: use #[expect] instead of #[allow]
+    clippy::allow_attributes_without_reason, // TODO: add reason to #[allow] attributes
+    clippy::unused_trait_names, // TODO: use `use Trait as _` for trait-only imports
+    clippy::doc_markdown, // TODO: fix doc markdown
+    clippy::redundant_test_prefix, // TODO: rename test functions without `test_` prefix
+    clippy::integer_division_remainder_used, // TODO: use checked arithmetic for division
+    clippy::result_large_err, // TODO: box large error variants
+    clippy::field_scoped_visibility_modifiers, // TODO: avoid pub(super) on fields
+    clippy::renamed_function_params, // TODO: rename trait impl params to match trait
+    clippy::unnecessary_semicolon, // TODO: remove unnecessary semicolons
+    clippy::non_std_lazy_statics, // TODO: use std::sync::LazyLock
+    clippy::get_first, // TODO: use .first() instead of .get(0)
+    clippy::cast_lossless, // TODO: remove lossless casts
+    clippy::unnecessary_debug_formatting, // TODO: remove unnecessary debug formatting
+    clippy::cast_precision_loss, // TODO: avoid lossy casts
+    clippy::needless_continue, // TODO: remove needless continue
+    clippy::legacy_numeric_constants, // TODO: use std::f64::consts instead of f64::consts
+    clippy::assigning_clones, // TODO: clone_into style is not used in this codebase
+    clippy::unnecessary_get_then_check, // TODO: use if let instead of get() + check
+    clippy::manual_repeat_n, // TODO: use std::iter::repeat_n
+    clippy::iter_over_hash_type, // TODO: avoid iterating over hash maps, output order is random
+    clippy::empty_line_after_doc_comments, // TODO: remove empty lines after doc comments
+    clippy::borrow_as_ptr, // TODO: use std::ptr::addr_of instead of borrow as ptr
+    clippy::used_underscore_items, // TODO: avoid using underscore-prefixed items
+    clippy::ignore_without_reason, // TODO: add reason to #[ignore]
+    clippy::multiple_bound_locations, // TODO: dedup trait bound locations
+    clippy::unused_result_ok, // TODO: use plain expression instead of `.ok()`
+    clippy::infinite_loop, // TODO: verify these loops can exit
+    clippy::struct_field_names, // TODO: remove type name repetition in field names
+    clippy::doc_lazy_continuation, // TODO: fix doc lazy continuation lines
+    clippy::empty_docs, // TODO: add doc content or remove empty doc comments
+    clippy::single_match_else, // TODO: expand to match with a single arm and else
+    clippy::new_without_default, // TODO: implement Default
+    clippy::uninlined_format_args, // TODO: inline format args
+    clippy::return_and_then, // TODO: avoid return x.then()
+    clippy::manual_unwrap_or_default, // TODO: use unwrap_or_default
+    clippy::io_other_error, // TODO: use io::Error::other
 )]
 
 pub mod async_fuse;

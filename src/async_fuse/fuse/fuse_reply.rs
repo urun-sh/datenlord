@@ -178,7 +178,7 @@ impl<'a> ReplyRaw<'a> {
         error: i32,
         data: impl AsIoSliceList + Send + Sync + 'static,
     ) -> nix::Result<usize> {
-        let header_len = mem::size_of::<FuseOutHeader>();
+        let header_len = size_of::<FuseOutHeader>();
 
         let header = FuseOutHeader {
             len: (header_len.overflow_add(data.len())).cast(),
@@ -229,7 +229,7 @@ impl<'a> ReplyRaw<'a> {
                 let error_code = if let Some(nix_err) =
                     source.root_cause().downcast_ref::<nix::Error>()
                 {
-                    if *nix_err == nix::errno::Errno::UnknownErrno {
+                    if *nix_err == Errno::UnknownErrno {
                         panic!(
                             "should not send nix::errno::Errno::UnknownErrno to FUSE kernel, \
                                     the error is: {} ,context is : {:?}",
@@ -636,7 +636,7 @@ impl<'a> ReplyDirectory<'a> {
         // This is similar to call `FUSE_REC_ALIGN(entlen)` in `fuse.h`.
         //
         // <https://github.com/torvalds/linux/blob/b85ea95d086471afb4ad062012a4d73cd328fa86/include/uapi/linux/fuse.h#L988-L989>
-        let entsize = super::super::util::round_up(entlen, mem::size_of::<u64>()); // 64bit align
+        let entsize = super::super::util::round_up(entlen, size_of::<u64>()); // 64bit align
 
         let padlen = entsize.overflow_sub(entlen);
         if self.data.len().overflow_add(entsize) > self.data.capacity() {
@@ -682,7 +682,7 @@ impl<'a> ReplyDirectory<'a> {
 unsafe fn fuse_dir_ent_in_raw(from: &FuseDirEnt) -> &[u8] {
     let base: *const u8 = <*const FuseDirEnt>::cast(from);
     unsafe {
-        let bytes = slice::from_raw_parts(base, mem::size_of::<FuseDirEnt>());
+        let bytes = slice::from_raw_parts(base, size_of::<FuseDirEnt>());
         bytes
     }
 }

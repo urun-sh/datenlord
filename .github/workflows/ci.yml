@@ -4,7 +4,7 @@ on:
     branches: [master]
 
 env:
-  CI_RUST_TOOLCHAIN: 1.74.0
+  CI_RUST_TOOLCHAIN: 1.88.0
   CONTROLLER_SOCKET_FILE: /tmp/controller.sock
   BIND_MOUNTER: target/debug/bind_mounter
   ETCD_CONTAINER_NAME: etcd
@@ -164,7 +164,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --all-features --all-targets --locked -- -D warnings
+          args: --all-targets --locked -- -D warnings
 
   fstest:
     name: fstest

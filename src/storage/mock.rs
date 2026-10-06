@@ -48,7 +48,7 @@ impl MemoryStorage {
         self.inner
             .lock()
             .get(&ino)
-            .map_or(false, |file| file.contains_key(&block_id))
+            .is_some_and(|file| file.contains_key(&block_id))
     }
 
     /// Tests if the file is flushed,

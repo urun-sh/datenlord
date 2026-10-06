@@ -142,14 +142,8 @@ pub fn u32_to_usize(x: u32) -> usize {
 #[must_use]
 pub const fn usize_to_u64(x: usize) -> u64 {
     #[allow(clippy::as_conversions)]
-    #[cfg(not(target_pointer_width = "128"))]
     {
         x as u64
-    }
-    #[cfg(target_pointer_width = "128")]
-    {
-        use std::convert::TryInto;
-        x.try_into().expect("number cast failed")
     }
 }
 

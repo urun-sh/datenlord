@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::Debug, mem, sync::Arc};
+use std::{collections::HashMap, fmt::Debug, sync::Arc};
 
 use async_trait::async_trait;
 use bytes::{Buf, BufMut, BytesMut};
@@ -11,9 +11,9 @@ use crate::{async_fuse::util::usize_to_u64, encode_to_buf};
 use super::{error::RpcError, utils::u64_to_usize};
 
 /// The size of the request header.
-pub const REQ_HEADER_SIZE: u64 = usize_to_u64(mem::size_of::<ReqHeader>());
+pub const REQ_HEADER_SIZE: u64 = usize_to_u64(size_of::<ReqHeader>());
 /// The size of the response header.
-pub const RESP_HEADER_SIZE: u64 = usize_to_u64(mem::size_of::<RespHeader>());
+pub const RESP_HEADER_SIZE: u64 = usize_to_u64(size_of::<RespHeader>());
 
 /// The `Encode` trait is used to encode a message structure into a byte buffer.
 pub trait Encode: Sync {
@@ -260,7 +260,7 @@ impl<P: RequestTask + Send + Sync> PacketsKeeper<P> {
     pub fn new(timeout: u64) -> Self {
         let (buffer_packets_sender, buffer_packets_receiver) = flume::bounded::<P>(1000);
         let packets_inner = Arc::new(Mutex::new(PacketsInner::new()));
-        let current_time = tokio::time::Instant::now();
+        let current_time = Instant::now();
 
         PacketsKeeper {
             inner: packets_inner,
@@ -362,7 +362,7 @@ impl<P: RequestTask + Send + Sync> PacketsKeeper<P> {
 #[allow(clippy::unwrap_used)]
 #[allow(dead_code)]
 mod tests {
-    use std::{mem, thread::sleep, time};
+    use std::{thread::sleep, time};
 
     use crate::async_fuse::util::usize_to_u64;
 
@@ -420,7 +420,7 @@ mod tests {
         }
 
         fn get_req_len(&self) -> u64 {
-            usize_to_u64(mem::size_of_val(&self.request))
+            usize_to_u64(size_of_val(&self.request))
         }
 
         fn set_resp_data(&mut self, _data: BytesMut) -> Result<(), RpcError> {

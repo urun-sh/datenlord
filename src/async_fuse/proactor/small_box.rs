@@ -27,7 +27,7 @@ unsafe fn drop_value<T>(p: *mut ()) {
 
 impl SmallBox {
     /// The size of inline storage in a [`SmallBox`]
-    const BYTES: usize = mem::size_of::<usize>() * NR_INLINE_PTR;
+    const BYTES: usize = size_of::<usize>() * NR_INLINE_PTR;
 
     /// Creates an empty [`SmallBox`]
     pub fn empty() -> Self {
@@ -48,7 +48,7 @@ impl SmallBox {
     /// Puts a value into the [`SmallBox`]. The previous value in it will be
     /// dropped.
     pub fn put<T: Send + 'static>(&mut self, value: T) -> *mut T {
-        assert!(mem::align_of::<usize>().wrapping_rem(mem::align_of::<T>()) == 0);
+        assert!(align_of::<usize>().wrapping_rem(align_of::<T>()) == 0);
         unsafe { self.put_unchecked(value) }
     }
 
@@ -58,11 +58,10 @@ impl SmallBox {
     /// # Safety
     /// + `T` must be [`Send`] + 'static.
     /// + `align_of::<T>()` must not be larger than `align_of::<usize>()`.
-    #[allow(box_pointers)]
     pub unsafe fn put_unchecked<T>(&mut self, value: T) -> *mut T {
         self.clear();
 
-        if mem::size_of::<T>() <= Self::BYTES {
+        if size_of::<T>() <= Self::BYTES {
             let value_ptr = self.bytes.as_mut_ptr().cast();
             ptr::write(value_ptr, value); // <- memcpy here: stack to stack or heap
             self.drop = drop_value::<T>;

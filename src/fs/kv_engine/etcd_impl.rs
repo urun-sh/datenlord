@@ -888,8 +888,8 @@ mod test {
         drop(client);
         // use two thread to do the second and third txn
         // and use channel to control the order
-        let (first_step_tx, mut first_step_rx) = tokio::sync::mpsc::channel(1);
-        let (second_step_tx, mut second_step_rx) = tokio::sync::mpsc::channel(1);
+        let (first_step_tx, mut first_step_rx) = mpsc::channel(1);
+        let (second_step_tx, mut second_step_rx) = mpsc::channel(1);
         let second_handle = tokio::spawn(async move {
             let (result, retry) = retry_txn!(1, {
                 let client = EtcdKVEngine::new_for_local_test(vec![ETCD_ADDRESS.to_owned()])

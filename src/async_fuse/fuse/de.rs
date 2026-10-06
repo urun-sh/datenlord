@@ -1,7 +1,7 @@
 //! FUSE protocol deserializer
 
 use std::ffi::OsStr;
-use std::{mem, slice};
+use std::slice;
 
 use better_as::pointer;
 use memchr::memchr;
@@ -19,6 +19,7 @@ pub struct Deserializer<'b> {
 
 /// Types which can be decoded from bytes
 #[allow(single_use_lifetimes)]
+#[allow(dead_code)] // not referenced; kept as part of the FUSE deserializer API
 pub trait Deserialize<'b>: Sized {
     /// Deserialize from bytes
     fn deserialize(
@@ -66,7 +67,7 @@ pub enum DeserializeError {
 #[inline]
 fn check_align<T>(ptr: *const u8) -> Result<(), DeserializeError> {
     let addr = pointer::to_address(ptr);
-    let align = mem::align_of::<T>();
+    let align = align_of::<T>();
     if addr.wrapping_rem(align) != 0 {
         trace!(
             "failed to convert bytes to type {}, \
@@ -130,8 +131,8 @@ impl<'b> Deserializer<'b> {
 
     /// Fetch some bytes and transmute to `&T`
     pub fn fetch_ref<T: FuseAbiData + Sized>(&mut self) -> Result<&'b T, DeserializeError> {
-        let ty_size: usize = mem::size_of::<T>();
-        let ty_align: usize = mem::align_of::<T>();
+        let ty_size: usize = size_of::<T>();
+        let ty_align: usize = align_of::<T>();
         debug_assert!(ty_size > 0 && ty_size.wrapping_rem(ty_align) == 0);
 
         check_size(self.bytes.len(), ty_size)?;
@@ -148,8 +149,8 @@ impl<'b> Deserializer<'b> {
     pub fn fetch_all_as_slice<T: FuseAbiData + Sized>(
         &mut self,
     ) -> Result<&'b [T], DeserializeError> {
-        let ty_size: usize = mem::size_of::<T>();
-        let ty_align: usize = mem::align_of::<T>();
+        let ty_size: usize = size_of::<T>();
+        let ty_align: usize = align_of::<T>();
         debug_assert!(ty_size > 0 && ty_size.wrapping_rem(ty_align) == 0);
 
         if self.bytes.len() < ty_size || self.bytes.len().wrapping_rem(ty_size) != 0 {
