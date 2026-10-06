@@ -11,7 +11,7 @@ fn main() {
         "src/csi/proto",      // output
         None,                 // customizations
     )
-    .unwrap_or_else(|e| panic!("Failed to compile gRPC definitions, the error is: {}", e));
+    .unwrap_or_else(|e| panic!("Failed to compile gRPC definitions, the error is: {e}"));
 
     // rust-protobuf 2.x emits `#![allow(box_pointers)]` in the generated
     // files. The `box_pointers` lint has been removed from rustc and merely

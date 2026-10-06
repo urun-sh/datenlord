@@ -149,8 +149,8 @@ impl<'b> Deserializer<'b> {
     pub fn fetch_all_as_slice<T: FuseAbiData + Sized>(
         &mut self,
     ) -> Result<&'b [T], DeserializeError> {
-        let ty_size: usize = mem::size_of::<T>();
-        let ty_align: usize = mem::align_of::<T>();
+        let ty_size: usize = size_of::<T>();
+        let ty_align: usize = align_of::<T>();
         debug_assert!(ty_size > 0 && ty_size.wrapping_rem(ty_align) == 0);
 
         if self.bytes.len() < ty_size || self.bytes.len().wrapping_rem(ty_size) != 0 {

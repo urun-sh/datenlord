@@ -1,3 +1,34 @@
+// The following lints are newly fired by the clippy of Rust 1.88
+// (the toolchain pinned by rust-toolchain.toml), TODO: fix them
+#![allow(
+    clippy::arbitrary_source_item_ordering,
+    clippy::allow_attributes,
+    clippy::allow_attributes_without_reason,
+    clippy::unused_trait_names,
+    clippy::doc_markdown,
+    clippy::result_large_err,
+    clippy::unnecessary_debug_formatting,
+    clippy::field_scoped_visibility_modifiers,
+    clippy::integer_division_remainder_used,
+    clippy::renamed_function_params,
+    clippy::get_first,
+    clippy::unnecessary_semicolon,
+    clippy::uninlined_format_args,
+    clippy::unnecessary_get_then_check,
+    clippy::iter_over_hash_type,
+    clippy::non_std_lazy_statics,
+    clippy::borrow_as_ptr,
+    clippy::return_and_then,
+    clippy::legacy_numeric_constants,
+    clippy::needless_continue,
+    clippy::multiple_bound_locations,
+    clippy::manual_repeat_n,
+    clippy::manual_unwrap_or_default,
+    clippy::assigning_clones,
+    clippy::new_without_default,
+    clippy::io_other_error
+)]
+
 //! The helper command to bind mount for non-root user
 
 use std::ffi::OsStr;

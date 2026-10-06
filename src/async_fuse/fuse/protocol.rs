@@ -1332,7 +1332,7 @@ impl FuseDirEntPlus {
     #[must_use]
     #[allow(dead_code)]
     pub fn size_with_name(&self) -> usize {
-        mem::size_of::<Self>().overflow_add(self.dirent.namelen.cast())
+        size_of::<Self>().overflow_add(self.dirent.namelen.cast())
     }
 }
 
